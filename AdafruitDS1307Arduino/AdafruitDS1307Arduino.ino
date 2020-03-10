@@ -1,6 +1,7 @@
 //**************************************************************************************************
-// ArduinoUNOExample1
-// This example demonstrates how to connect and use the Adafruit DS1307 RTC Breakout.
+// AdafruitDS1307Arduino.ino
+// This example demonstrates how to connect and display date/time values from an Adafruit DS1307
+// Real Time Clock (RTC) Breakout board.
 //
 // REVISIONS
 // 02/29/2020   Bob Mixon
