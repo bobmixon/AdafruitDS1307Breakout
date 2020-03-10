@@ -34,36 +34,10 @@ char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursd
 void setup()
 {
   // Initialize the serial communications. This is for displaying status and RTC values only.
-  while(!Serial);
-  Serial.begin(57600);
-  Serial.print(F("Board: "));
-  Serial.println(BOARD_NAME);
+  initializeSerial();
 
   // Initialize the RTC.
-  Serial.print(F("RTC  : "));
-  if(!rtc.begin()){
-    Serial.println(F("Couldn't find RTC"));
-    return;
-  }
-  if(!rtc.isrunning())
-  {
-    Serial.println(F("RTC is not running"));
-    return;
-  }
-  Serial.println(F("RTC is running!"));
-  rtcRunning = true;
-  
-  // If this is the first time you are running this, the RTC requires initialization or it will not
-  // operate correctly. The following line sets the RTC to the date & time this sketch was compiled.
-  if(RTC_INITIALIZE)
-  {
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-  }
-  
-  // If you'd like to set the RTC with an explicit date & time...
-  // January 21, 2014 at 3am you would call:
-  // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
-
+  rtcRunning = initializeRTC();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -87,6 +61,49 @@ void loop()
   serialPrintDateTime(curDateTime);
 
   delay(500);
+}
+
+//--------------------------------------------------------------------------------------------------
+// initializeRTC
+//--------------------------------------------------------------------------------------------------
+bool initializeRTC()
+{
+  Serial.print(F("RTC  : "));
+  if(!rtc.begin()){
+    Serial.println(F("Couldn't find RTC"));
+    return(false);
+  }
+  if(!rtc.isrunning())
+  {
+    Serial.println(F("RTC is not running"));
+    return(false);
+  }
+  Serial.println(F("RTC is running!"));
+  
+  // If this is the first time you are running this, the RTC requires initialization or it will not
+  // operate correctly. The following line sets the RTC to the date & time this sketch was compiled.
+  if(RTC_INITIALIZE)
+  {
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  }
+  
+  // If you'd like to set the RTC with an explicit date & time...
+  // January 21, 2014 at 3am you would call:
+  // rtc.adjust(DateTime(2014, 1, 21, 3, 0, 0));
+
+  // RTC initialization successful.
+  return(true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// initializeSerial
+//--------------------------------------------------------------------------------------------------
+void initializeSerial()
+{
+  while(!Serial);
+  Serial.begin(57600);
+  Serial.print(F("Board: "));
+  Serial.println(BOARD_NAME);
 }
 
 //--------------------------------------------------------------------------------------------------
